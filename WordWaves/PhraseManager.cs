@@ -86,7 +86,7 @@ namespace WordWaves
             if (win)
             {
                 batch.Begin();
-                batch.DrawString(font, "You're Winner!", new Vector2(100), Color.Green);
+                batch.DrawString(font, "You're Winner!", new Vector2(100, 50), Color.Green);
                 batch.End();
             }
         }

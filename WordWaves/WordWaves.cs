@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using WordWaves;
 
 namespace WordWaves
@@ -15,6 +16,9 @@ namespace WordWaves
         PhraseManager phraseManager;
         Texture2D pixel; //a brush for drawing rectangles
         Texture2D villagerTx;
+        Texture2D foamTx;
+        Texture2D seaTx;
+        Texture2D oceanGradientTx;
         string qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
         Villager[] villagers;
         KeyboardState keystateCurrent, keystateOld;
@@ -80,7 +84,9 @@ namespace WordWaves
             pixel.SetData<Color>(new Color[] { Color.White });
 
             villagerTx = Content.Load<Texture2D>("red");
-
+            foamTx = Content.Load<Texture2D>("foam");
+            seaTx = Content.Load<Texture2D>("sea");
+            oceanGradientTx = Content.Load<Texture2D>("ocean-gradient");
             // TODO: use this.Content to load your game content here
             phraseManager.LoadContent(Content);
         }
@@ -174,14 +180,33 @@ namespace WordWaves
             spriteBatch.Draw(pixel, new Rectangle(sun_x, y, sun_width, sun_height), Color.Yellow);
             y += sun_height;
 
+            //draw the sea in the distance
+            int seaTileSize = (int)Math.Ceiling(screenSize.X * 0.1f);
+            int SeaTileColumns = (int)Math.Ceiling(screenSize.X / (float)seaTileSize);
+            for (int s = 0; s < SeaTileColumns; ++s)
+            {
+                spriteBatch.Draw(seaTx, new Rectangle(s * seaTileSize, y, seaTileSize, seaTileSize), Color.White);
+            }
+            y += seaTileSize;
+
             //draw the ocean
             int sea_height = (int)(screenSize.Y * 0.5f);
-            spriteBatch.Draw(pixel, new Rectangle(0, y, screenWidth, sea_height), Color.Blue);
+            spriteBatch.Draw(oceanGradientTx, new Rectangle(0, y, screenWidth, sea_height), Color.White);
             y += sea_height;
+
+            //draw the foam
+            int foamSize = (int)Math.Ceiling(screenSize.X * 0.1f);
+            int foamColumns = (int)Math.Ceiling(screenSize.X / (float)foamSize);
+            for (int f = 0; f < foamColumns; ++f)
+            {
+                spriteBatch.Draw(foamTx, new Rectangle(f * foamSize, y, foamSize, foamSize), Color.White);
+            }
+            y += foamSize;
 
             //draw the beach
             int beach_height = screenHeight - y;
-            spriteBatch.Draw(pixel, new Rectangle(0, y, screenWidth, beach_height), Color.Tan);
+            Color beachColor = new Color(255, 241, 146, 255);
+            spriteBatch.Draw(pixel, new Rectangle(0, y, screenWidth, beach_height), beachColor);
 
             //draw the villagers
             y += (int)(screenSize.Y * 0.05f);

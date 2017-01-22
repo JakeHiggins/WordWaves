@@ -37,7 +37,7 @@ namespace WordWaves
             phrasePieces.Add(phrase.Substring(1));
 
             offset = Vector2.Zero;
-            startPosition = new Vector2(100);
+            startPosition = new Vector2(100, 50);
 
             colors = new List<Color>();
             colors.Add(Color.White);
