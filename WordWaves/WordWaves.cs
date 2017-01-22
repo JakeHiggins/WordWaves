@@ -75,6 +75,7 @@ namespace WordWaves
                 Exit();
 
             // TODO: Add your update logic here
+            phraseManager.Update(gameTime);
 
             base.Update(gameTime);
         }

@@ -19,22 +19,36 @@ namespace WordWaves
 
         private Phrase currentPhrase;
 
+        Random rand = new Random();
+
         public PhraseManager()
         {
             unusedPhrases = new List<Phrase>();
             usedPhrases = new List<Phrase>();
-        }
 
-        public void Initialize()
-        {
-            unusedPhrases.Add(new Phrase("grump", 0));
+            unusedPhrases.Add(new Phrase("GGggrump", 0));
             unusedPhrases.Add(new Phrase("boss", 0));
             unusedPhrases.Add(new Phrase("finger", 0));
             unusedPhrases.Add(new Phrase("doggo", 0));
             unusedPhrases.Add(new Phrase("It's happening!", 0));
+        }
 
-            currentPhrase = unusedPhrases[0];
-            unusedPhrases.RemoveAt(0);
+        public void Initialize()
+        {
+            foreach(Phrase p in unusedPhrases)
+            {
+                p.Initialize();
+            }
+
+            chooseNewPhrase();
+        }
+
+        private void chooseNewPhrase()
+        {
+            int index = rand.Next(unusedPhrases.Count - 1);
+            currentPhrase = unusedPhrases[index];
+            unusedPhrases.RemoveAt(index);
+
         }
 
         public void LoadContent(ContentManager Content)
@@ -44,14 +58,18 @@ namespace WordWaves
 
         public void Update(GameTime gameTime)
         {
+            currentPhrase.Update(gameTime);
 
+            if (currentPhrase.Typed)
+            {
+                usedPhrases.Add(currentPhrase);
+                chooseNewPhrase();
+            }
         }
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Begin();
             currentPhrase.Draw(batch, font);
-            batch.End();
         }
     }
 }
