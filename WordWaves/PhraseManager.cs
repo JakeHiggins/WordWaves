@@ -58,6 +58,11 @@ namespace WordWaves
             unusedPhrases.RemoveAt(index);
         }
 
+        public Phrase GetCurrentPhrase()
+        {
+            return currentPhrase;
+        }
+
         public void LoadContent(ContentManager Content)
         {
             font = Content.Load<SpriteFont>("TypeTest");

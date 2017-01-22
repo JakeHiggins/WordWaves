@@ -16,18 +16,37 @@ namespace WordWaves
         Texture2D pixel; //a brush for drawing rectangles
         Texture2D villagerTx;
         string qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
-        Keys[] qwertyKeys;
+        Villager[] villagers;
+        KeyboardState keystateCurrent, keystateOld;
 
         public WordWaves()
         {
             graphics = new GraphicsDeviceManager(this);
             phraseManager = new PhraseManager();
             Content.RootDirectory = "Content";
-            //organize keys to match a qwerty keyboard
-            qwertyKeys = new Keys[26];
-            for(int i = 0; i < qwertyKeys.Length; ++i)
+            //create villagers based on a qwerty keyboard
+            villagers = new Villager[26];
+            for(int i = 0; i < villagers.Length; ++i)
             {
-                qwertyKeys[i] = (Keys)(int)char.ToUpper(qwertyLayout[i]);
+                Keys villagerKey = (Keys)(int)char.ToUpper(qwertyLayout[i]);
+                int villagerX = 0;
+                int villagerY = 0;
+                if (i < 10)
+                {
+                    villagerX = i;
+                    villagerY = 0;
+                }
+                else if (i < 19)
+                {
+                    villagerX = (i - 10);
+                    villagerY = 1;
+                }
+                else if (i < 26)
+                {
+                    villagerX = (i - 19);
+                    villagerY = 2;
+                }
+                villagers[i] = new Villager(villagerKey, villagerX, villagerY);
             }
         }
 
@@ -85,10 +104,32 @@ namespace WordWaves
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            keystateOld = keystateCurrent;
+            keystateCurrent = Keyboard.GetState();
+
             // TODO: Add your update logic here
+            Phrase currentPhrase = phraseManager.GetCurrentPhrase();
             phraseManager.Update(gameTime);
 
-            base.Update(gameTime);
+            //
+            //update villagers
+            //
+            foreach(Villager v in villagers)
+            {
+                if (currentPhrase.Typed)
+                {
+                    v.readyToWhip = false;
+                }
+                else
+                {
+                    if (!v.readyToWhip && keystateCurrent.IsKeyDown(v.key) && keystateOld.IsKeyUp(v.key))
+                    {
+                        v.readyToWhip = true;
+                    }
+                }
+            }
+
+                base.Update(gameTime);
         }
 
         /// <summary>
@@ -146,31 +187,17 @@ namespace WordWaves
             y += (int)(screenSize.Y * 0.05f);
             for (int i = 0; i < 26; ++i )
             {
-                int villagerX = 0;
-                int villagerY = 0;
-                if(i < 10)
-                {
-                    villagerX = i;
-                    villagerY = 0;
-                }else if(i < 19)
-                {
-                    villagerX = (i - 10);
-                    villagerY = 1;
-                }else if(i < 26)
-                {
-                    villagerX = (i - 19);
-                    villagerY = 2;
-                }
+                //position in QWERTY formation
                 float villagerRange = screenSize.X / 10;
                 int villagerSpacing = 3;
                 int villagerWidth = (int)villagerRange - (villagerSpacing*2);
-                int villagerHeight = (int)villagerRange - (villagerSpacing*2);
-                float vx = (float)villagerX * villagerRange + villagerSpacing;
-                float vy = y + (float)villagerY * villagerRange;
-                vx += (float)villagerY * villagerRange * 0.25f;
+                int villagerHeight = (int)villagerRange - (villagerSpacing * 2);
+                Villager villager = villagers[i];
+                float vx = (float)villager.keyboardColumn * villagerRange + villagerSpacing;
+                float vy = y + (float)villager.keyboardRow * villagerRange;
+                vx += (float)villager.keyboardRow * villagerRange * 0.25f;
                 Color villager_color = Color.White;
-                Keys villager_key = qwertyKeys[i];
-                if (Keyboard.GetState().IsKeyDown(villager_key))
+                if (villager.readyToWhip)
                 {
                     villager_color = Color.Goldenrod;
                     vy -= villagerRange * 0.1f;
