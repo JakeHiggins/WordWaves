@@ -50,19 +50,35 @@ namespace WordWaves
             KeyboardState state = Keyboard.GetState();
 
             char currentChar = phrasePieces[1][0];
-            Keys currentCharEnum = (Keys)((int)(char.ToUpper(currentChar)));
-
-            bool currentCharLower = false;
-
-            // Determine if it's a lower or upper use of the Key
-            if (char.IsLower(currentChar))
-                currentCharLower = true;
+            Keys currentCharEnum = KeyFromChar(currentChar);
+            bool currentCharLower = LowerStatus(currentChar);
+            //Console.WriteLine(currentCharEnum);
 
             bool keyPressed = false;
+
+            // Debug statements for pressing keys
+            /*if(state.GetPressedKeys().Length > 0)
+            {
+                Console.WriteLine(state.GetPressedKeys()[0]);
+                if (state.GetPressedKeys()[0] == currentCharEnum && !keyHold)
+                {
+                    Console.Write("Pressed: ");
+                    Console.WriteLine(currentCharEnum);
+                }
+            }*/
 
             // Checks if the key was pressed with proper modifiers
             if(state.IsKeyDown(currentCharEnum))
             {
+                if (currentCharEnum == Keys.Space)
+                {
+                    Console.WriteLine("Pressed Quot");
+                    Console.WriteLine(currentCharLower);
+                    
+                }
+                if (currentCharEnum == Keys.Space)
+                    keyPressed = true;
+
                 if(state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift))
                 {
                     if (!currentCharLower)
@@ -119,6 +135,69 @@ namespace WordWaves
         public bool Typed
         {
             get { return typed; }
+        }
+
+        public bool LowerStatus(char character)
+        {
+            if (char.IsDigit(character))
+                return true;
+            if (char.IsLetter(character))
+                return char.IsLower(character);
+
+            switch(character.ToString())
+            {
+                case "'":
+                case ";":
+                case "[":
+                case "]":
+                case "=":
+                case ",":
+                case ".":
+                case "/":
+                case "`":
+                case "\\": return true;
+            }
+
+            return false;
+        }
+
+        public Keys KeyFromChar(char character)
+        {
+            if(char.IsDigit(character) || char.IsLetter(character))
+                return (Keys)((int)(char.ToUpper(character)));
+
+            Keys key;
+            switch (character.ToString())
+            {
+                case "'": case "\"": key = Keys.OemQuotes; break;
+                case ";": case ":": key = Keys.OemSemicolon; break;
+                case "[": case "{": key = Keys.OemOpenBrackets; break;
+                case "]": case "}": key = Keys.OemCloseBrackets; break;
+                case "-": case "_": key = Keys.OemMinus; break;
+                case "=": case "+": key = Keys.OemPlus; break;
+                case ",": case "<": key = Keys.OemComma; break;
+                case ".": case ">": key = Keys.OemPeriod; break;
+                case "/": case "?": key = Keys.OemQuestion; break;
+                case "|": case "\\": key = Keys.OemPipe; break;
+                case "`": case "~": key = Keys.OemTilde; break;
+
+                case "!": key = Keys.D1; break;
+                case "@": key = Keys.D2; break;
+                case "#": key = Keys.D3; break;
+                case "$": key = Keys.D4; break;
+                case "%": key = Keys.D5; break;
+                case "^": key = Keys.D6; break;
+                case "&": key = Keys.D7; break;
+                case "*": key = Keys.D8; break;
+                case "(": key = Keys.D9; break;
+                case ")": key = Keys.D0; break;
+
+                case " ": key = Keys.Space; break;
+
+                default: key = Keys.Oem8; break;
+            }
+
+            return key;
         }
     }
 }

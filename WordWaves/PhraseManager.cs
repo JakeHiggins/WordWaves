@@ -21,6 +21,8 @@ namespace WordWaves
 
         Random rand = new Random();
 
+        bool win = false;
+
         public PhraseManager()
         {
             unusedPhrases = new List<Phrase>();
@@ -45,10 +47,15 @@ namespace WordWaves
 
         private void chooseNewPhrase()
         {
+            if (unusedPhrases.Count == 0)
+            {
+                win = true;
+                return;
+            }
+
             int index = rand.Next(unusedPhrases.Count - 1);
             currentPhrase = unusedPhrases[index];
             unusedPhrases.RemoveAt(index);
-
         }
 
         public void LoadContent(ContentManager Content)
@@ -69,7 +76,14 @@ namespace WordWaves
 
         public void Draw(SpriteBatch batch)
         {
-            currentPhrase.Draw(batch, font);
+            if(!win)
+                currentPhrase.Draw(batch, font);
+            if (win)
+            {
+                batch.Begin();
+                batch.DrawString(font, "You're Winner!", new Vector2(100), Color.Green);
+                batch.End();
+            }
         }
     }
 }
