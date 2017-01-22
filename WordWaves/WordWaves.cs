@@ -15,12 +15,20 @@ namespace WordWaves
         PhraseManager phraseManager;
         Texture2D pixel; //a brush for drawing rectangles
         Texture2D villagerTx;
+        string qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
+        Keys[] qwertyKeys;
 
         public WordWaves()
         {
             graphics = new GraphicsDeviceManager(this);
             phraseManager = new PhraseManager();
             Content.RootDirectory = "Content";
+            //organize keys to match a qwerty keyboard
+            qwertyKeys = new Keys[26];
+            for(int i = 0; i < qwertyKeys.Length; ++i)
+            {
+                qwertyKeys[i] = (Keys)(int)char.ToUpper(qwertyLayout[i]);
+            }
         }
 
         /// <summary>
@@ -160,7 +168,14 @@ namespace WordWaves
                 float vx = (float)villagerX * villagerRange + villagerSpacing;
                 float vy = y + (float)villagerY * villagerRange;
                 vx += (float)villagerY * villagerRange * 0.25f;
-                spriteBatch.Draw(villagerTx, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), Color.White);
+                Color villager_color = Color.White;
+                Keys villager_key = qwertyKeys[i];
+                if (Keyboard.GetState().IsKeyDown(villager_key))
+                {
+                    villager_color = Color.Goldenrod;
+                    vy -= villagerRange * 0.1f;
+                }
+                spriteBatch.Draw(villagerTx, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), villager_color);
 
             }
 
