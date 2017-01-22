@@ -41,6 +41,7 @@
     <Compile Include="Phrase.cs" />
     <Compile Include="PhraseManager.cs" />
     <Compile Include="Villager.cs" />
+    <Compile Include="Wave.cs" />
     <Compile Include="WordWaves.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

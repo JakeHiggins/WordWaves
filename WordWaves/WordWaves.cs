@@ -20,11 +20,12 @@ namespace WordWaves
         Texture2D seaTx;
         Texture2D oceanGradientTx;
         Texture2D houseTx;
-        Texture2D waveSmallTx;
         string qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
         Villager[] villagers;
         KeyboardState keystateCurrent, keystateOld;
         SamplerState samplerState = SamplerState.LinearWrap;
+        int housesDestroyedCount = 0;
+        Wave testWave = new Wave();
 
         public WordWaves()
         {
@@ -92,9 +93,11 @@ namespace WordWaves
             seaTx = Content.Load<Texture2D>("sea");
             oceanGradientTx = Content.Load<Texture2D>("ocean-gradient");
             houseTx = Content.Load<Texture2D>("house");
-            waveSmallTx = Content.Load<Texture2D>("wave");
+
             // TODO: use this.Content to load your game content here
             phraseManager.LoadContent(Content);
+            testWave.LoadContent(Content);
+            testWave.Start();
         }
 
         /// <summary>
@@ -118,10 +121,25 @@ namespace WordWaves
 
             keystateOld = keystateCurrent;
             keystateCurrent = Keyboard.GetState();
+            float tt = (float)gameTime.TotalGameTime.TotalSeconds;
 
             // TODO: Add your update logic here
             Phrase currentPhrase = phraseManager.GetCurrentPhrase();
             phraseManager.Update(gameTime);
+
+            //
+            //update waves
+            //
+            if(!testWave.active)
+            {
+                testWave.Reset();
+                testWave.Start();
+            }
+            testWave.Update(gameTime);
+            if(currentPhrase.Typed)
+            {
+                testWave.Destroy();
+            }
 
             //
             //update villagers
@@ -268,31 +286,9 @@ namespace WordWaves
             }
 
             //draw the waves
-            int waveWidth = (int)(screenSize.X * 0.1f);
-            int waveHeight = waveWidth;
-            float top0 = seaY;
-            float bot0 = seaY + waveHeight;
-            float top1 = beachY;
-            float bot1 = screenHeight;
-            float waveSpeed = 0.5f;
-            //slow->fast->slow
-            float maxWaveProgress = 1.6f;
-            float waveProgress = (tt * waveSpeed) % maxWaveProgress;
-            float exponential4 = (float)Math.Pow(waveProgress, 4);
-            float translationProgress = exponential4;
-            if (waveProgress > 1)
-                translationProgress = waveProgress;
-            float top = MathHelper.Lerp(top0, top1, translationProgress);
-            float bot = MathHelper.Lerp(bot0, bot1, translationProgress);
-            Rectangle waveRect = new Rectangle();
-            waveRect.Y = (int)top;
-            waveRect.Height = (int)(bot - top);
-            waveRect.Width = (int)MathHelper.Lerp(waveWidth, screenWidth, waveProgress);
-            waveRect.X = (screenWidth / 2) - waveRect.Width / 2;
-            Rectangle waveTilingRect = new Rectangle(waveRect.X, 0, waveRect.Width, waveSmallTx.Height);
-            spriteBatch.Draw(waveSmallTx, waveRect, waveTilingRect, Color.PowderBlue);
+            testWave.Draw(spriteBatch, seaY, beachY);
 
-                spriteBatch.End();
+            spriteBatch.End();
 
             // TODO: Add your drawing code here
             phraseManager.Draw(spriteBatch);
