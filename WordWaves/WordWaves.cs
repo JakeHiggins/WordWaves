@@ -14,6 +14,7 @@ namespace WordWaves
         SpriteBatch spriteBatch;
         PhraseManager phraseManager;
         Texture2D pixel; //a brush for drawing rectangles
+        Texture2D villagerTx;
 
         public WordWaves()
         {
@@ -50,6 +51,8 @@ namespace WordWaves
 
             pixel = new Texture2D(GraphicsDevice, 1, 1);
             pixel.SetData<Color>(new Color[] { Color.White });
+
+            villagerTx = Content.Load<Texture2D>("red");
 
             // TODO: use this.Content to load your game content here
             phraseManager.LoadContent(Content);
@@ -156,7 +159,7 @@ namespace WordWaves
                 float vx = (float)villagerX * villagerRange + villagerSpacing;
                 float vy = y + (float)villagerY * villagerRange;
                 vx += (float)villagerY * villagerRange * 0.25f;
-                spriteBatch.Draw(pixel, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), Color.Green);
+                spriteBatch.Draw(villagerTx, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), Color.White);
 
             }
 
