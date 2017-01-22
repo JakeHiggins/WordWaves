@@ -129,7 +129,37 @@ namespace WordWaves
             int beach_height = screenHeight - y;
             spriteBatch.Draw(pixel, new Rectangle(0, y, screenWidth, beach_height), Color.Tan);
 
-            spriteBatch.End();
+            //draw the villagers
+            y += (int)(screenSize.Y * 0.05f);
+            for (int i = 0; i < 26; ++i )
+            {
+                int villagerX = 0;
+                int villagerY = 0;
+                if(i < 10)
+                {
+                    villagerX = i;
+                    villagerY = 0;
+                }else if(i < 19)
+                {
+                    villagerX = (i - 10);
+                    villagerY = 1;
+                }else if(i < 26)
+                {
+                    villagerX = (i - 19);
+                    villagerY = 2;
+                }
+                float villagerRange = screenSize.X / 10;
+                int villagerSpacing = 3;
+                int villagerWidth = (int)villagerRange - (villagerSpacing*2);
+                int villagerHeight = (int)villagerRange - (villagerSpacing*2);
+                float vx = (float)villagerX * villagerRange + villagerSpacing;
+                float vy = y + (float)villagerY * villagerRange;
+                vx += (float)villagerY * villagerRange * 0.25f;
+                spriteBatch.Draw(pixel, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), Color.Green);
+
+            }
+
+                spriteBatch.End();
 
             // TODO: Add your drawing code here
             phraseManager.Draw(spriteBatch);
