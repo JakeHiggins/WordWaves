@@ -14,6 +14,7 @@ namespace WordWaves
         public bool active = false;
         public const float maxWaveProgress = 1.6f;
         public const float waveSpeed = 0.5f;
+        protected float waveProgressOld = 0;
         public float waveProgress = 0;
         public float waveTimeElapsed = 0;
         public Texture2D waveSmallTx;
@@ -37,6 +38,7 @@ namespace WordWaves
             float et = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (active)
             {
+                waveProgressOld = waveProgress;
                 waveTimeElapsed += et;
                 waveProgress = waveTimeElapsed * waveSpeed;
                 if (waveProgress > maxWaveProgress)
@@ -55,6 +57,17 @@ namespace WordWaves
         public void Destroy()
         {
             active = false;
+        }
+
+        /// <summary>
+        /// Determine whether the wave reached a certain point in its progression
+        /// </summary>
+        /// <param name="progressPoint">The progress we are awaiting.</param>
+        /// <returns>Whether the wave hit this point in the last frame</returns>
+        public bool CheckOverlap(float progressPoint)
+        {
+            //warn(tim): this doesnt cuurrently handle if progressOld > progress 
+            return progressPoint > waveProgressOld && progressPoint <= waveProgress;
         }
 
         public void Draw(SpriteBatch spriteBatch, int startY, int endY)

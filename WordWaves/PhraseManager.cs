@@ -22,6 +22,7 @@ namespace WordWaves
         Random rand = new Random();
 
         bool win = false;
+        bool isGameOver = false;
 
         public PhraseManager()
         {
@@ -37,7 +38,7 @@ namespace WordWaves
 
         public void Initialize()
         {
-            foreach(Phrase p in unusedPhrases)
+            foreach (Phrase p in unusedPhrases)
             {
                 p.Initialize();
             }
@@ -49,7 +50,7 @@ namespace WordWaves
         {
             if (unusedPhrases.Count == 0)
             {
-                win = true;
+                EndGame(true);
                 return;
             }
 
@@ -61,6 +62,17 @@ namespace WordWaves
         public Phrase GetCurrentPhrase()
         {
             return currentPhrase;
+        }
+
+        public void EndGame(bool winner)
+        {
+            isGameOver = true;
+            win = winner;
+        }
+
+        public bool IsGameOver()
+        {
+            return isGameOver;
         }
 
         public void LoadContent(ContentManager Content)
@@ -81,12 +93,21 @@ namespace WordWaves
 
         public void Draw(SpriteBatch batch)
         {
-            if(!win)
+            if (!isGameOver)
+            {
                 currentPhrase.Draw(batch, font);
-            if (win)
+            }
+            else
             {
                 batch.Begin();
-                batch.DrawString(font, "You're Winner!", new Vector2(100, 50), Color.Green);
+                if (win)
+                {
+                    batch.DrawString(font, "You're Winner!", new Vector2(100, 50), Color.Green);
+                }
+                else
+                {
+                    batch.DrawString(font, "You're Loser!", new Vector2(100, 50), Color.Red);
+                }
                 batch.End();
             }
         }

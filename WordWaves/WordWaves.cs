@@ -24,6 +24,7 @@ namespace WordWaves
         Villager[] villagers;
         KeyboardState keystateCurrent, keystateOld;
         SamplerState samplerState = SamplerState.LinearWrap;
+        int villageHouseCount = 7;
         int housesDestroyedCount = 0;
         Wave testWave = new Wave();
 
@@ -130,7 +131,7 @@ namespace WordWaves
             //
             //update waves
             //
-            if(!testWave.active)
+            if(!testWave.active && !phraseManager.IsGameOver())
             {
                 testWave.Reset();
                 testWave.Start();
@@ -139,6 +140,19 @@ namespace WordWaves
             if(currentPhrase.Typed)
             {
                 testWave.Destroy();
+            }
+            if (testWave.CheckOverlap(1.0f))
+            {
+                housesDestroyedCount++;
+            }
+
+            //
+            //update village houses
+            //
+            if(housesDestroyedCount >= villageHouseCount)
+            {
+                housesDestroyedCount = villageHouseCount;
+                phraseManager.EndGame(false);
             }
 
             //
@@ -275,12 +289,13 @@ namespace WordWaves
 
             //draw the village
             y += (int)(3 * villagerRange + screenSize.Y * 0.025f);
-            int villageHouseCount = 7;
             int villageHouseRange = (int)(screenSize.X / (float)villageHouseCount);
             int villageHouseSpacing = 5;
             int villageHouseSize = villageHouseRange - villageHouseSpacing * 2;
             for (int h = 0; h < villageHouseCount; ++h )
             {
+                if (h < housesDestroyedCount)
+                    continue;
                 int villageHouseX = h * villageHouseRange + villageHouseSpacing;
                 spriteBatch.Draw(houseTx, new Rectangle(villageHouseX, y, villageHouseSize, villageHouseSize), Color.White);
             }
