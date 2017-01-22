@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using WordWaves;
 
 namespace WordWaves
 {
@@ -11,10 +12,12 @@ namespace WordWaves
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        PhraseManager phraseManager;
 
         public WordWaves()
         {
             graphics = new GraphicsDeviceManager(this);
+            phraseManager = new PhraseManager();
             Content.RootDirectory = "Content";
         }
 
@@ -27,6 +30,7 @@ namespace WordWaves
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            phraseManager.Initialize();
 
             base.Initialize();
         }
@@ -41,6 +45,7 @@ namespace WordWaves
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            phraseManager.LoadContent(Content);
         }
 
         /// <summary>
@@ -76,6 +81,7 @@ namespace WordWaves
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            phraseManager.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }
