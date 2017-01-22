@@ -19,9 +19,11 @@ namespace WordWaves
         Texture2D foamTx;
         Texture2D seaTx;
         Texture2D oceanGradientTx;
+        Texture2D houseTx;
         string qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
         Villager[] villagers;
         KeyboardState keystateCurrent, keystateOld;
+        SamplerState samplerState = SamplerState.LinearClamp;
 
         public WordWaves()
         {
@@ -83,10 +85,13 @@ namespace WordWaves
             pixel = new Texture2D(GraphicsDevice, 1, 1);
             pixel.SetData<Color>(new Color[] { Color.White });
 
+            // Load textures
             villagerTx = Content.Load<Texture2D>("red");
             foamTx = Content.Load<Texture2D>("foam");
             seaTx = Content.Load<Texture2D>("sea");
             oceanGradientTx = Content.Load<Texture2D>("ocean-gradient");
+            houseTx = Content.Load<Texture2D>("house");
+
             // TODO: use this.Content to load your game content here
             phraseManager.LoadContent(Content);
         }
@@ -135,6 +140,22 @@ namespace WordWaves
                 }
             }
 
+            //
+            // Toggle draw modes
+            //
+            if(keystateCurrent.IsKeyDown(Keys.D1) && keystateOld.IsKeyUp(Keys.D1))
+            {
+                samplerState = SamplerState.PointClamp;
+            }
+            if(keystateCurrent.IsKeyDown(Keys.D2) && keystateOld.IsKeyUp(Keys.D2))
+            {
+                samplerState = SamplerState.LinearClamp;
+            }
+            if (keystateCurrent.IsKeyDown(Keys.D3) && keystateOld.IsKeyUp(Keys.D3))
+            {
+                samplerState = SamplerState.AnisotropicClamp;
+            }
+
                 base.Update(gameTime);
         }
 
@@ -155,7 +176,7 @@ namespace WordWaves
             //
             //draw scenery
             //
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, samplerState);
             int y = 0;
 
             //draw the clouds (atleast 3)
@@ -190,9 +211,9 @@ namespace WordWaves
             y += seaTileSize;
 
             //draw the ocean
-            int sea_height = (int)(screenSize.Y * 0.5f);
-            spriteBatch.Draw(oceanGradientTx, new Rectangle(0, y, screenWidth, sea_height), Color.White);
-            y += sea_height;
+            int ocean_height = (int)(screenSize.Y * 0.4f);
+            spriteBatch.Draw(oceanGradientTx, new Rectangle(0, y, screenWidth, ocean_height), Color.White);
+            y += ocean_height;
 
             //draw the foam
             int foamSize = (int)Math.Ceiling(screenSize.X * 0.1f);
@@ -209,14 +230,14 @@ namespace WordWaves
             spriteBatch.Draw(pixel, new Rectangle(0, y, screenWidth, beach_height), beachColor);
 
             //draw the villagers
-            y += (int)(screenSize.Y * 0.05f);
+            y += (int)(screenSize.Y * 0.025f);
+            float villagerRange = screenSize.X / 10;
+            int villagerSpacing = 3;
+            int villagerWidth = (int)villagerRange - (villagerSpacing * 2);
+            int villagerHeight = (int)villagerRange - (villagerSpacing * 2);
             for (int i = 0; i < 26; ++i )
             {
                 //position in QWERTY formation
-                float villagerRange = screenSize.X / 10;
-                int villagerSpacing = 3;
-                int villagerWidth = (int)villagerRange - (villagerSpacing*2);
-                int villagerHeight = (int)villagerRange - (villagerSpacing * 2);
                 Villager villager = villagers[i];
                 float vx = (float)villager.keyboardColumn * villagerRange + villagerSpacing;
                 float vy = y + (float)villager.keyboardRow * villagerRange;
@@ -229,6 +250,18 @@ namespace WordWaves
                 }
                 spriteBatch.Draw(villagerTx, new Rectangle((int)vx, (int)vy, villagerWidth, villagerHeight), villager_color);
 
+            }
+
+            //draw the village
+            y += (int)(3 * villagerRange + screenSize.Y * 0.025f);
+            int villageHouseCount = 7;
+            int villageHouseRange = (int)(screenSize.X / (float)villageHouseCount);
+            int villageHouseSpacing = 5;
+            int villageHouseSize = villageHouseRange - villageHouseSpacing * 2;
+            for (int h = 0; h < villageHouseCount; ++h )
+            {
+                int villageHouseX = h * villageHouseRange + villageHouseSpacing;
+                spriteBatch.Draw(houseTx, new Rectangle(villageHouseX, y, villageHouseSize, villageHouseSize), Color.White);
             }
 
                 spriteBatch.End();
