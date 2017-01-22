@@ -115,5 +115,10 @@ namespace WordWaves
             }
             batch.End();
         }
+
+        public bool Typed
+        {
+            get { return typed; }
+        }
     }
 }

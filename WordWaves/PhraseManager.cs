@@ -19,6 +19,8 @@ namespace WordWaves
 
         private Phrase currentPhrase;
 
+        Random rand = new Random();
+
         public PhraseManager()
         {
             unusedPhrases = new List<Phrase>();
@@ -38,8 +40,15 @@ namespace WordWaves
                 p.Initialize();
             }
 
-            currentPhrase = unusedPhrases[0];
-            unusedPhrases.RemoveAt(0);
+            chooseNewPhrase();
+        }
+
+        private void chooseNewPhrase()
+        {
+            int index = rand.Next(unusedPhrases.Count - 1);
+            currentPhrase = unusedPhrases[index];
+            unusedPhrases.RemoveAt(index);
+
         }
 
         public void LoadContent(ContentManager Content)
@@ -50,6 +59,12 @@ namespace WordWaves
         public void Update(GameTime gameTime)
         {
             currentPhrase.Update(gameTime);
+
+            if (currentPhrase.Typed)
+            {
+                usedPhrases.Add(currentPhrase);
+                chooseNewPhrase();
+            }
         }
 
         public void Draw(SpriteBatch batch)
