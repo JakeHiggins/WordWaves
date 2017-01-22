@@ -103,17 +103,18 @@ namespace WordWaves
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
             int y = 0;
 
-            //draw the clouds (atleast 2)
-            int cloudCount = 4;
-            float cloudRange = screenSize.X / (cloudCount - 1);
-            int cloudWidth = (int)(cloudRange - screenSize.X * 0.1f);
+            //draw the clouds (atleast 3)
+            int cloudCount = 16;
+            float cloudRange = screenSize.X / (cloudCount - 2);
+            int cloudWidth = (int)(cloudRange) + 5;// - screenSize.X * 0.1f);
             int cloudHeight = (int)(screenSize.Y * 0.05f);
             for (int i = 0; i < cloudCount; ++i)
             {
                 //scroll clouds
                 float cloudSpeed = 5;
-                int cloudX = (int)(cloudRange * i - (tt * cloudSpeed) % cloudRange);
-                spriteBatch.Draw(pixel, new Rectangle(cloudX, y, cloudWidth, cloudHeight), Color.Gray);
+                int cloudX = (int)(cloudRange * i - (tt * cloudSpeed) % (cloudRange*2));
+                int cloudY = y - (i % 2) * (cloudHeight / 4);
+                spriteBatch.Draw(pixel, new Rectangle(cloudX, cloudY, cloudWidth, cloudHeight), Color.Gray);
             }
             y = (int)(screenSize.Y * 0.15f);
 
