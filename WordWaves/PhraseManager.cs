@@ -24,7 +24,7 @@ namespace WordWaves
             unusedPhrases = new List<Phrase>();
             usedPhrases = new List<Phrase>();
 
-            unusedPhrases.Add(new Phrase("grump", 0));
+            unusedPhrases.Add(new Phrase("GGggrump", 0));
             unusedPhrases.Add(new Phrase("boss", 0));
             unusedPhrases.Add(new Phrase("finger", 0));
             unusedPhrases.Add(new Phrase("doggo", 0));

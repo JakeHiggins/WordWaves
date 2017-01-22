@@ -13,7 +13,8 @@ namespace WordWaves
     {
         String phrase;
         int difficulty;
-        List<string> phrasePieces;
+        List<String> phrasePieces;
+        Keys previousCharEnum;
 
         Vector2 startPosition;
         Vector2 offset;
@@ -48,35 +49,34 @@ namespace WordWaves
         {
             KeyboardState state = Keyboard.GetState();
 
-            char currentKey = phrasePieces[1][0];
-            Keys currentKeyEnum = (Keys)((int)(char.ToUpper(currentKey)));
+            char currentChar = phrasePieces[1][0];
+            Keys currentCharEnum = (Keys)((int)(char.ToUpper(currentChar)));
 
-            bool currentKeyLower = false;
+            bool currentCharLower = false;
 
             // Determine if it's a lower or upper use of the Key
-            if (char.IsLower(currentKey))
-                currentKeyLower = true;
+            if (char.IsLower(currentChar))
+                currentCharLower = true;
 
             bool keyPressed = false;
 
             // Checks if the key was pressed with proper modifiers
-            if(state.IsKeyDown(currentKeyEnum))
+            if(state.IsKeyDown(currentCharEnum))
             {
                 if(state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift))
                 {
-                    if (!currentKeyLower)
+                    if (!currentCharLower)
                         keyPressed = true;
                 }
                 else
                 {
-                    if (currentKeyLower)
+                    if (currentCharLower)
                         keyPressed = true;
                 }
             }
 
             if(keyPressed && !keyHold)
             {
-                keyHold = true;
                 if (phrasePieces[2].Length == 0)
                 {
                     typed = true;
@@ -86,10 +86,14 @@ namespace WordWaves
                     phrasePieces[0] = phrasePieces[0] + phrasePieces[1];
                     phrasePieces[1] = phrasePieces[2][0].ToString();
                     phrasePieces[2] = phrasePieces[2].Substring(1);
+                    previousCharEnum = currentCharEnum;
+
+                    if (phrasePieces[1] == currentChar.ToString())
+                        keyHold = true;
                 }
             }
 
-            if (state.GetPressedKeys().Length == 0)
+            if (state.IsKeyUp(previousCharEnum))
                 keyHold = false;
         }
 
