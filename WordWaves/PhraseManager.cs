@@ -23,15 +23,20 @@ namespace WordWaves
         {
             unusedPhrases = new List<Phrase>();
             usedPhrases = new List<Phrase>();
-        }
 
-        public void Initialize()
-        {
             unusedPhrases.Add(new Phrase("grump", 0));
             unusedPhrases.Add(new Phrase("boss", 0));
             unusedPhrases.Add(new Phrase("finger", 0));
             unusedPhrases.Add(new Phrase("doggo", 0));
             unusedPhrases.Add(new Phrase("It's happening!", 0));
+        }
+
+        public void Initialize()
+        {
+            foreach(Phrase p in unusedPhrases)
+            {
+                p.Initialize();
+            }
 
             currentPhrase = unusedPhrases[0];
             unusedPhrases.RemoveAt(0);
@@ -44,14 +49,12 @@ namespace WordWaves
 
         public void Update(GameTime gameTime)
         {
-
+            currentPhrase.Update(gameTime);
         }
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Begin();
             currentPhrase.Draw(batch, font);
-            batch.End();
         }
     }
 }
