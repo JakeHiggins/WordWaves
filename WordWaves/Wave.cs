@@ -17,15 +17,9 @@ namespace WordWaves
         protected float waveProgressOld = 0;
         public float waveProgress = 0;
         public float waveTimeElapsed = 0;
-        public Texture2D waveSmallTx;
 
         public Wave()
         {
-        }
-
-        public void LoadContent(ContentManager Content)
-        {
-            waveSmallTx = Content.Load<Texture2D>("wave");
         }
 
         public void Start()
@@ -70,7 +64,7 @@ namespace WordWaves
             return progressPoint > waveProgressOld && progressPoint <= waveProgress;
         }
 
-        public void Draw(SpriteBatch spriteBatch, int startY, int endY)
+        public void Draw(SpriteBatch spriteBatch, int startY, int endY, Texture2D waveTexture)
         {
             if (active)
             {
@@ -92,10 +86,10 @@ namespace WordWaves
                 Rectangle waveRect = new Rectangle();
                 waveRect.Y = (int)top;
                 waveRect.Height = (int)(bot - top);
-                waveRect.Width = (int)MathHelper.Lerp(waveWidth, screenWidth, waveProgress);
+                waveRect.Width = (int)MathHelper.Lerp(waveWidth, screenWidth/4, waveProgress);
                 waveRect.X = (screenWidth / 2) - waveRect.Width / 2;
-                Rectangle waveTilingRect = new Rectangle(waveRect.X, 0, waveRect.Width, waveSmallTx.Height);
-                spriteBatch.Draw(waveSmallTx, waveRect, waveTilingRect, Color.PowderBlue);
+                Rectangle waveTilingRect = new Rectangle(waveRect.X, 0, waveRect.Width, waveTexture.Height);
+                spriteBatch.Draw(waveTexture, waveRect, waveTilingRect, Color.PowderBlue);
             }
         }
     }

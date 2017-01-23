@@ -26,7 +26,7 @@ namespace WordWaves
         SamplerState samplerState = SamplerState.LinearWrap;
         int villageHouseCount = 7;
         int housesDestroyedCount = 0;
-        Wave testWave = new Wave();
+        WaveManager waveManager = new WaveManager();
 
         public WordWaves()
         {
@@ -97,8 +97,7 @@ namespace WordWaves
 
             // TODO: use this.Content to load your game content here
             phraseManager.LoadContent(Content);
-            testWave.LoadContent(Content);
-            testWave.Start();
+            waveManager.LoadContent(Content);
         }
 
         /// <summary>
@@ -131,19 +130,18 @@ namespace WordWaves
             //
             //update waves
             //
-            if(!testWave.active && !phraseManager.IsGameOver())
+            waveManager.Update(gameTime);
+            for (int w = 0; w < waveManager.waves.Count; ++w)
             {
-                testWave.Reset();
-                testWave.Start();
-            }
-            testWave.Update(gameTime);
-            if(currentPhrase.Typed)
-            {
-                testWave.Destroy();
-            }
-            if (testWave.CheckOverlap(1.0f))
-            {
-                housesDestroyedCount++;
+                Wave wave = waveManager.waves[w];
+                if (w == 0 && currentPhrase.Typed)
+                {
+                    wave.Destroy();
+                }
+                if (wave.CheckOverlap(1.0f))
+                {
+                    housesDestroyedCount++;
+                }
             }
 
             //
@@ -301,7 +299,7 @@ namespace WordWaves
             }
 
             //draw the waves
-            testWave.Draw(spriteBatch, seaY, beachY);
+            waveManager.Draw(spriteBatch, seaY, beachY);
 
             spriteBatch.End();
 
