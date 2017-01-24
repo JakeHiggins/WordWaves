@@ -24,3 +24,10 @@ C:\Users\jth70\Game Programming\WordWaves\WordWaves\obj\x86\Debug\WordWaves.exe
 C:\Users\jth70\Game Programming\WordWaves\WordWaves\obj\x86\Debug\WordWaves.pdb
 C:\Users\jth70\Game Programming\WordWaves\WordWaves\obj\x86\Debug\WordWaves.csprojResolveAssemblyReference.cache
 C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\TypeTest.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\red.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\foam.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\house.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\ocean-gradient.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\sea.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\wave-medium.xnb
+C:\Users\jth70\Game Programming\WordWaves\WordWaves\bin\Windows\x86\Debug\Content\wave.xnb

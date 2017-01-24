@@ -4,6 +4,13 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/red.png</File>
     <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/TypeTest.spritefont</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/foam.png</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/sea.png</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/ocean-gradient.png</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/house.png</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/wave.png</File>
+    <File>C:/Users/jth70/Game Programming/WordWaves/WordWaves/Content/wave-medium.png</File>
   </SourceFiles>
 </SourceFileCollection>
