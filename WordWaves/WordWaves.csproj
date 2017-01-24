@@ -56,6 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="Phrases\english_words.txt" />
+    <Content Include="Phrases\google_offensive.txt" />
+    <Content Include="Phrases\parseDictionary.py" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
